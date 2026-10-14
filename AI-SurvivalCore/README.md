@@ -32,7 +32,11 @@ docker run --rm --name ai-survival-core -p 8501:8501 ai-survival-core
 
 The image runs as a non-root user, exposes port `8501`, disables Streamlit telemetry, and includes a health check at `/_stcore/health`. Open `http://localhost:8501` after the container starts.
 
-For a container platform, publish this image and route traffic to port `8501`. The app already listens on `0.0.0.0`, runs headlessly, and keeps its Streamlit error details private in production.
+For a container platform, publish this image and route traffic to the port it provides through the `PORT` environment variable. Locally, the image defaults to `8501`.
+
+## Deploy on Render
+
+Create a **Web Service** from this repository and choose **Docker** as the runtime. Keep the service root directory at the repository root so the Dockerfile, `app.py`, and `core/` are in the build context. The container binds Streamlit to Render's `PORT` and provides the `/_stcore/health` endpoint; set that path as the Render health check path if configuring one in the dashboard. Theme colors are set in the image, so the build does not depend on `.streamlit/config.toml` being present in the build context.
 
 ## Deploy to Streamlit Community Cloud
 
